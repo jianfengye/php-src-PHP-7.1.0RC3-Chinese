@@ -287,3 +287,4 @@ win32/phpts.def
 win32/wsyslog.h
 .ftpconfig
 .tags
+.tags1

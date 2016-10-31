@@ -1,5 +1,10 @@
 The PHP Interpreter
 ===================
+中文注释说明:
+
+- 部分代码会进行注释说明
+- 为了代码简洁性，把win32的代码给注释掉，能更清晰
+===================
 
 This is the github mirror of the official PHP repository located at
 http://git.php.net.
@@ -36,4 +41,3 @@ Guidelines for contributors
 - [README.GIT-RULES](/README.GIT-RULES)
 - [README.MAILINGLIST_RULES](/README.MAILINGLIST_RULES)
 - [README.RELEASE_PROCESS](/README.RELEASE_PROCESS)
-
