@@ -1,0 +1,132 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	0	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+SAPI_H	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_H$/;"	macro	line:22
+SAPI_OPTION_NO_CHDIR	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_OPTION_NO_CHDIR /;"	macro	line:35
+SAPI_POST_BLOCK_SIZE	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_POST_BLOCK_SIZE /;"	macro	line:36
+SAPI_API	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#		define SAPI_API /;"	macro	line:40
+SAPI_API	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#		define SAPI_API /;"	macro	line:42
+SAPI_API	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#	define SAPI_API /;"	macro	line:45
+SAPI_API	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#	define SAPI_API$/;"	macro	line:47
+shutdown	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#undef shutdown$/;"	macro	line:50
+header	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *header;$/;"	member	line:53	struct:__anon1
+header_len	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	size_t header_len;$/;"	member	line:54	struct:__anon1
+sapi_header_struct	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^} sapi_header_struct;$/;"	typedef	line:55	typeref:struct:__anon1
+headers	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_llist headers;$/;"	member	line:59	struct:__anon2
+http_response_code	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int http_response_code;$/;"	member	line:60	struct:__anon2
+send_default_content_type	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	unsigned char send_default_content_type;$/;"	member	line:61	struct:__anon2
+mimetype	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *mimetype;$/;"	member	line:62	struct:__anon2
+http_status_line	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *http_status_line;$/;"	member	line:63	struct:__anon2
+sapi_headers_struct	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^} sapi_headers_struct;$/;"	typedef	line:64	typeref:struct:__anon2
+sapi_post_entry	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^typedef struct _sapi_post_entry sapi_post_entry;$/;"	typedef	line:67	typeref:struct:_sapi_post_entry
+sapi_module_struct	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^typedef struct _sapi_module_struct sapi_module_struct;$/;"	typedef	line:68	typeref:struct:_sapi_module_struct
+request_method	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	const char *request_method;$/;"	member	line:81	struct:__anon3
+query_string	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *query_string;$/;"	member	line:82	struct:__anon3
+cookie_data	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *cookie_data;$/;"	member	line:83	struct:__anon3
+content_length	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_long content_length;$/;"	member	line:84	struct:__anon3
+path_translated	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *path_translated;$/;"	member	line:86	struct:__anon3
+request_uri	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *request_uri;$/;"	member	line:87	struct:__anon3
+request_body	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	struct _php_stream *request_body;$/;"	member	line:90	struct:__anon3	typeref:struct:__anon3::_php_stream
+content_type	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	const char *content_type;$/;"	member	line:92	struct:__anon3
+headers_only	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_bool headers_only;$/;"	member	line:94	struct:__anon3
+no_headers	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_bool no_headers;$/;"	member	line:95	struct:__anon3
+headers_read	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_bool headers_read;$/;"	member	line:96	struct:__anon3
+post_entry	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	sapi_post_entry *post_entry;$/;"	member	line:98	struct:__anon3
+content_type_dup	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *content_type_dup;$/;"	member	line:100	struct:__anon3
+auth_user	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *auth_user;$/;"	member	line:103	struct:__anon3
+auth_password	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *auth_password;$/;"	member	line:104	struct:__anon3
+auth_digest	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *auth_digest;$/;"	member	line:105	struct:__anon3
+argv0	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *argv0;$/;"	member	line:108	struct:__anon3
+current_user	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *current_user;$/;"	member	line:110	struct:__anon3
+current_user_length	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int current_user_length;$/;"	member	line:111	struct:__anon3
+argc	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int argc;$/;"	member	line:114	struct:__anon3
+argv	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char **argv;$/;"	member	line:115	struct:__anon3
+proto_num	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int proto_num;$/;"	member	line:116	struct:__anon3
+sapi_request_info	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^} sapi_request_info;$/;"	typedef	line:117	typeref:struct:__anon3
+_sapi_globals_struct	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^typedef struct _sapi_globals_struct {$/;"	struct	line:120
+server_context	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void *server_context;$/;"	member	line:121	struct:_sapi_globals_struct
+request_info	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	sapi_request_info request_info;$/;"	member	line:122	struct:_sapi_globals_struct
+sapi_headers	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	sapi_headers_struct sapi_headers;$/;"	member	line:123	struct:_sapi_globals_struct
+read_post_bytes	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int64_t read_post_bytes;$/;"	member	line:124	struct:_sapi_globals_struct
+post_read	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	unsigned char post_read;$/;"	member	line:125	struct:_sapi_globals_struct
+headers_sent	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	unsigned char headers_sent;$/;"	member	line:126	struct:_sapi_globals_struct
+global_stat	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_stat_t global_stat;$/;"	member	line:127	struct:_sapi_globals_struct
+default_mimetype	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *default_mimetype;$/;"	member	line:128	struct:_sapi_globals_struct
+default_charset	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *default_charset;$/;"	member	line:129	struct:_sapi_globals_struct
+rfc1867_uploaded_files	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	HashTable *rfc1867_uploaded_files;$/;"	member	line:130	struct:_sapi_globals_struct
+post_max_size	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_long post_max_size;$/;"	member	line:131	struct:_sapi_globals_struct
+options	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int options;$/;"	member	line:132	struct:_sapi_globals_struct
+sapi_started	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_bool sapi_started;$/;"	member	line:133	struct:_sapi_globals_struct
+global_request_time	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	double global_request_time;$/;"	member	line:134	struct:_sapi_globals_struct
+known_post_content_types	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	HashTable known_post_content_types;$/;"	member	line:135	struct:_sapi_globals_struct
+callback_func	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zval callback_func;$/;"	member	line:136	struct:_sapi_globals_struct
+fci_cache	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_fcall_info_cache fci_cache;$/;"	member	line:137	struct:_sapi_globals_struct
+sapi_globals_struct	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^} sapi_globals_struct;$/;"	typedef	line:138	typeref:struct:_sapi_globals_struct
+SG	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^# define SG(/;"	macro	line:143
+line	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *line; \/* If you allocated this, you need to free it yourself *\/$/;"	member	line:169	struct:__anon4
+line_len	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	size_t line_len;$/;"	member	line:170	struct:__anon4
+response_code	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_long response_code; \/* long due to zend_parse_parameters compatibility *\/$/;"	member	line:171	struct:__anon4
+sapi_header_line	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^} sapi_header_line;$/;"	typedef	line:172	typeref:struct:__anon4
+SAPI_HEADER_REPLACE	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	SAPI_HEADER_REPLACE,		\/* sapi_header_line* 	*\/$/;"	enumerator	line:175	enum:__anon5
+SAPI_HEADER_ADD	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	SAPI_HEADER_ADD,			\/* sapi_header_line* 	*\/$/;"	enumerator	line:176	enum:__anon5
+SAPI_HEADER_DELETE	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	SAPI_HEADER_DELETE,			\/* sapi_header_line* 	*\/$/;"	enumerator	line:177	enum:__anon5
+SAPI_HEADER_DELETE_ALL	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	SAPI_HEADER_DELETE_ALL,		\/* void					*\/$/;"	enumerator	line:178	enum:__anon5
+SAPI_HEADER_SET_STATUS	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	SAPI_HEADER_SET_STATUS		\/* int 					*\/$/;"	enumerator	line:179	enum:__anon5
+sapi_header_op_enum	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^} sapi_header_op_enum;$/;"	typedef	line:180	typeref:enum:__anon5
+sapi_add_header	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define sapi_add_header(/;"	macro	line:187
+_sapi_module_struct	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^struct _sapi_module_struct {  \/\/ SAPI模块结构$/;"	struct	line:219
+name	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *name; \/\/ 应用层名称，比如cli,cgi等$/;"	member	line:220	struct:_sapi_module_struct
+pretty_name	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *pretty_name; \/\/ 应用层更易读的名字，比如cli对应的就是Command Line Interface$/;"	member	line:221	struct:_sapi_module_struct
+startup	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*startup)(struct _sapi_module_struct *sapi_module); \/\/ 当一个应用要调用php的时候，这个模块启动的时候会调用的函数$/;"	member	line:223	struct:_sapi_module_struct
+shutdown	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*shutdown)(struct _sapi_module_struct *sapi_module); \/\/ 当一个应用要调用php的时候，这个模块结束的时候会调用的函数$/;"	member	line:224	struct:_sapi_module_struct
+activate	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*activate)(void); \/\/ 在处理每个request的时候，激活需要调用的函数$/;"	member	line:226	struct:_sapi_module_struct
+deactivate	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*deactivate)(void); \/\/ 在处理完每个request的时候，收尾时候要调用的函数$/;"	member	line:227	struct:_sapi_module_struct
+ub_write	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	size_t (*ub_write)(const char *str, size_t str_length); \/\/ 这个函数告诉php如何输出数据$/;"	member	line:229	struct:_sapi_module_struct
+flush	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*flush)(void *server_context); \/\/ 提供给php的刷新缓存的函数指针$/;"	member	line:230	struct:_sapi_module_struct
+get_stat	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	zend_stat_t *(*get_stat)(void); \/\/ 用来判断要执行文件的权限，来判断是否有执行权限$/;"	member	line:231	struct:_sapi_module_struct
+getenv	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *(*getenv)(char *name, size_t name_len); \/\/ 获取环境变量的方法$/;"	member	line:232	struct:_sapi_module_struct
+header_handler	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*header_handler)(sapi_header_struct *sapi_header, sapi_header_op_enum op, sapi_headers_struct *sapi_headers); \/\/ 这个函数会在我们调用header()的时候被调用$/;"	member	line:236	struct:_sapi_module_struct
+send_headers	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*send_headers)(sapi_headers_struct *sapi_headers); \/\/ 发送所有的header$/;"	member	line:237	struct:_sapi_module_struct
+send_header	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*send_header)(sapi_header_struct *sapi_header, void *server_context); \/\/ 单独发送某一个header$/;"	member	line:238	struct:_sapi_module_struct
+read_post	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	size_t (*read_post)(char *buffer, size_t count_bytes); \/\/ 如何获取HTTP POST中的数据$/;"	member	line:240	struct:_sapi_module_struct
+read_cookies	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *(*read_cookies)(void);  \/\/ 如何获取cookie中的数据$/;"	member	line:241	struct:_sapi_module_struct
+register_server_variables	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*register_server_variables)(zval *track_vars_array); \/\/ 这个函数可以给$_SERVER中获取变量$/;"	member	line:243	struct:_sapi_module_struct
+log_message	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*log_message)(char *message, int syslog_type_int); \/\/ 输出错误信息函数$/;"	member	line:244	struct:_sapi_module_struct
+get_request_time	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	double (*get_request_time)(void); \/\/ 获取请求时间的函数$/;"	member	line:245	struct:_sapi_module_struct
+terminate_process	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*terminate_process)(void);  \/\/ TODO: 调用exit的时候调用的方法$/;"	member	line:246	struct:_sapi_module_struct
+php_ini_path_override	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *php_ini_path_override;  \/\/ PHP的ini文件被复写了所复写的地址$/;"	member	line:248	struct:_sapi_module_struct
+default_post_reader	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*default_post_reader)(void); \/\/ 这里和前面的read_post有个差别，read_post负责如何获取POST数据，而这里的函数负责如何解析POST数据$/;"	member	line:250	struct:_sapi_module_struct
+treat_data	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*treat_data)(int arg, char *str, zval *destArray); \/\/ 对数据进行处理，比如进行安全过滤等。 default_post_reader\/tread_data\/input_filter是三个能对输入进行过滤和处理的函数$/;"	member	line:251	struct:_sapi_module_struct
+executable_location	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *executable_location; \/\/ 执行的地理位置$/;"	member	line:252	struct:_sapi_module_struct
+php_ini_ignore	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int php_ini_ignore; \/\/ TODO:$/;"	member	line:254	struct:_sapi_module_struct
+php_ini_ignore_cwd	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int php_ini_ignore_cwd; \/\/ 不在当前路径寻找php.ini$/;"	member	line:255	struct:_sapi_module_struct
+get_fd	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*get_fd)(int *fd); \/\/ 获取执行文件的fd$/;"	member	line:257	struct:_sapi_module_struct
+force_http_10	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*force_http_10)(void); \/\/ 强制使用http1.0$/;"	member	line:259	struct:_sapi_module_struct
+get_target_uid	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*get_target_uid)(uid_t *); \/\/ 获取执行程序的uid$/;"	member	line:261	struct:_sapi_module_struct
+get_target_gid	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int (*get_target_gid)(gid_t *); \/\/ 获取执行程序的gid$/;"	member	line:262	struct:_sapi_module_struct
+input_filter	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	unsigned int (*input_filter)(int arg, char *var, char **val, size_t val_len, size_t *new_val_len); \/\/ 对输入进行过滤。比如将输入参数填充到自动全局变量$_GET, $_POST, $_COOKIE中$/;"	member	line:264	struct:_sapi_module_struct
+ini_defaults	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*ini_defaults)(HashTable *configuration_hash); \/\/ 默认的ini配置$/;"	member	line:266	struct:_sapi_module_struct
+phpinfo_as_text	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	int phpinfo_as_text; \/\/ TODO:$/;"	member	line:267	struct:_sapi_module_struct
+ini_entries	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *ini_entries; \/\/ TODO:$/;"	member	line:269	struct:_sapi_module_struct
+additional_functions	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	const zend_function_entry *additional_functions; \/\/ 每个SAPI模块特有的一些函数注册，比如cli的cli_get_process_title$/;"	member	line:270	struct:_sapi_module_struct
+input_filter_init	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	unsigned int (*input_filter_init)(void); \/\/ TODO:$/;"	member	line:271	struct:_sapi_module_struct
+_sapi_post_entry	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^struct _sapi_post_entry {$/;"	struct	line:274
+content_type	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	char *content_type;$/;"	member	line:275	struct:_sapi_post_entry
+content_type_len	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	uint content_type_len;$/;"	member	line:276	struct:_sapi_post_entry
+post_reader	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*post_reader)(void);$/;"	member	line:277	struct:_sapi_post_entry
+post_handler	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^	void (*post_handler)(char *content_type_dup, void *arg);$/;"	member	line:278	struct:_sapi_post_entry
+SAPI_HEADER_ADD	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_HEADER_ADD	/;"	macro	line:282
+SAPI_HEADER_SENT_SUCCESSFULLY	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_HEADER_SENT_SUCCESSFULLY	/;"	macro	line:285
+SAPI_HEADER_DO_SEND	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_HEADER_DO_SEND	/;"	macro	line:286
+SAPI_HEADER_SEND_FAILED	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_HEADER_SEND_FAILED	/;"	macro	line:287
+SAPI_DEFAULT_MIMETYPE	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_DEFAULT_MIMETYPE	/;"	macro	line:289
+SAPI_DEFAULT_CHARSET	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_DEFAULT_CHARSET	/;"	macro	line:290
+SAPI_PHP_VERSION_HEADER	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_PHP_VERSION_HEADER	/;"	macro	line:291
+SAPI_POST_READER_FUNC	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_POST_READER_FUNC(/;"	macro	line:293
+SAPI_POST_HANDLER_FUNC	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_POST_HANDLER_FUNC(/;"	macro	line:294
+SAPI_TREAT_DATA_FUNC	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_TREAT_DATA_FUNC(/;"	macro	line:296
+SAPI_INPUT_FILTER_FUNC	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define SAPI_INPUT_FILTER_FUNC(/;"	macro	line:297
+STANDARD_SAPI_MODULE_PROPERTIES	/Users/yejianfeng/Documents/workspace/php-src-PHP-7.1.0RC3/main/SAPI.h	/^#define STANDARD_SAPI_MODULE_PROPERTIES /;"	macro	line:306
