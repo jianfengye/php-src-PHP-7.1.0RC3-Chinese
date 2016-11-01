@@ -82,17 +82,9 @@ SAPI_API void sapi_startup(sapi_module_struct *sf)
 
 #ifdef ZTS
 	ts_allocate_id(&sapi_globals_id, sizeof(sapi_globals_struct), (ts_allocate_ctor) sapi_globals_ctor, (ts_allocate_dtor) sapi_globals_dtor);
-# ifdef PHP_WIN32
-	_configthreadlocale(_ENABLE_PER_THREAD_LOCALE);
-# endif
 #else
 	sapi_globals_ctor(&sapi_globals);
 #endif
-
-#ifdef PHP_WIN32
-	tsrm_win32_startup();
-#endif
-
 	reentrancy_startup();
 }
 
@@ -105,10 +97,6 @@ SAPI_API void sapi_shutdown(void)
 #endif
 
 	reentrancy_shutdown();
-
-#ifdef PHP_WIN32
-	tsrm_win32_shutdown();
-#endif
 }
 
 
@@ -868,7 +856,7 @@ SAPI_API int sapi_send_headers(void)
 
 			memcpy(default_header.header, "Content-type: ", sizeof("Content-type: ") - 1);
 			memcpy(default_header.header + sizeof("Content-type: ") - 1, SG(sapi_headers).mimetype, len + 1);
-			
+
 			sapi_header_add_op(SAPI_HEADER_ADD, &default_header);
 		} else {
 			efree(default_mimetype);

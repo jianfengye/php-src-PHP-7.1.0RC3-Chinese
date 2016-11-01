@@ -407,48 +407,12 @@ int php_init_config(void)
 		char *default_location;
 		char *env_location;
 		static const char paths_separator[] = { ZEND_PATHS_SEPARATOR, 0 };
-#ifdef PHP_WIN32
-		char *reg_location;
-		char phprc_path[MAXPATHLEN];
-#endif
 
 		env_location = getenv("PHPRC");
 
-#ifdef PHP_WIN32
-		if (!env_location) {
-			char dummybuf;
-			int size;
-
-			SetLastError(0);
-
-			/*If the given buffer is not large enough to hold the data, the return value is
-			the buffer size,  in characters, required to hold the string and its terminating
-			null character. We use this return value to alloc the final buffer. */
-			size = GetEnvironmentVariableA("PHPRC", &dummybuf, 0);
-			if (GetLastError() == ERROR_ENVVAR_NOT_FOUND) {
-				/* The environment variable doesn't exist. */
-				env_location = "";
-			} else {
-				if (size == 0) {
-					env_location = "";
-				} else {
-					size = GetEnvironmentVariableA("PHPRC", phprc_path, size);
-					if (size == 0) {
-						env_location = "";
-					} else {
-						env_location = phprc_path;
-					}
-				}
-			}
-		}
-#else
 		if (!env_location) {
 			env_location = "";
 		}
-#endif
-		/*
-		 * Prepare search path
-		 */
 
 		search_path_size = MAXPATHLEN * 4 + (int)strlen(env_location) + 3 + 1;
 		php_ini_search_path = (char *) emalloc(search_path_size);
@@ -463,18 +427,6 @@ int php_init_config(void)
 			strlcat(php_ini_search_path, env_location, search_path_size);
 			php_ini_file_name = env_location;
 		}
-
-#ifdef PHP_WIN32
-		/* Add registry location */
-		reg_location = GetIniPathFromRegistry();
-		if (reg_location != NULL) {
-			if (*php_ini_search_path) {
-				strlcat(php_ini_search_path, paths_separator, search_path_size);
-			}
-			strlcat(php_ini_search_path, reg_location, search_path_size);
-			efree(reg_location);
-		}
-#endif
 
 		/* Add cwd (not with CLI) */
 		if (!sapi_module.php_ini_ignore_cwd) {

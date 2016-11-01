@@ -251,7 +251,7 @@ struct _sapi_module_struct {  // SAPI模块结构
 	void (*treat_data)(int arg, char *str, zval *destArray); // 对数据进行处理，比如进行安全过滤等。 default_post_reader/tread_data/input_filter是三个能对输入进行过滤和处理的函数
 	char *executable_location; // 执行的地理位置
 
-	int php_ini_ignore; // TODO:
+	int php_ini_ignore; // 是否不使用任何ini配置文件，比如php －n 就将这个位置设置为1
 	int php_ini_ignore_cwd; // 不在当前路径寻找php.ini
 
 	int (*get_fd)(int *fd); // 获取执行文件的fd
@@ -264,9 +264,9 @@ struct _sapi_module_struct {  // SAPI模块结构
 	unsigned int (*input_filter)(int arg, char *var, char **val, size_t val_len, size_t *new_val_len); // 对输入进行过滤。比如将输入参数填充到自动全局变量$_GET, $_POST, $_COOKIE中
 
 	void (*ini_defaults)(HashTable *configuration_hash); // 默认的ini配置
-	int phpinfo_as_text; // TODO:
+	int phpinfo_as_text; // 是否打印phpinfo信息
 
-	char *ini_entries; // TODO:
+	char *ini_entries; // 有没有附带的ini配置，比如使用php -d date.timezone=America/Adak,可以在命令行中设置时区
 	const zend_function_entry *additional_functions; // 每个SAPI模块特有的一些函数注册，比如cli的cli_get_process_title
 	unsigned int (*input_filter_init)(void); // TODO:
 };

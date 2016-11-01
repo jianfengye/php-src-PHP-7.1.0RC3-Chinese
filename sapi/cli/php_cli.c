@@ -142,6 +142,7 @@ const char HARDCODED_INI[] =
 	"max_input_time=-1\n\0";
 
 
+// 这里显示cli模式下接受的参数和对应的意义
 const opt_struct OPTIONS[] = {
 	{'a', 0, "interactive"},
 	{'B', 1, "process-begin"},
@@ -674,8 +675,9 @@ static int do_cli(int argc, char **argv) /* {{{ */
 
 	zend_try {
 
-		CG(in_compilation) = 0; /* not initialized but needed for several options */
+		CG(in_compilation) = 0; // 并未在编译中
 
+		// 这里处理了 i-输出phpinfo内容/ v-输出php版本 / m-输出扩展信息
 		while ((c = php_getopt(argc, argv, OPTIONS, &php_optarg, &php_optind, 0, 2)) != -1) {
 			switch (c) {
 
@@ -741,10 +743,14 @@ static int do_cli(int argc, char **argv) /* {{{ */
 
 		php_optind = orig_optind;
 		php_optarg = orig_optarg;
+
+		// 下面的代码做了几个事情：
+		// 1 根据参数设置了behavior参数
+		// 2 有执行文件的就将文件存在script_file
 		while ((c = php_getopt(argc, argv, OPTIONS, &php_optarg, &php_optind, 0, 2)) != -1) {
 			switch (c) {
 
-			case 'a':	/* interactive mode */
+			case 'a': // php的交互模式
 				if (!interactive) {
 					if (behavior != PHP_MODE_STANDARD) {
 						param_error = param_mode_conflict;
@@ -755,11 +761,10 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				}
 				break;
 
-			case 'C': /* don't chdir to the script directory */
-				/* This is default so NOP */
+			case 'C': // 不要把cwd目录变成脚本所在的目录。这个默认就是cwd是当前执行路径，所以这里什么都不做。
 				break;
 
-			case 'F':
+			case 'F': // php -F <FILE> 进入交互模式，每执行一行就执行一次<FILE>文件
 				if (behavior == PHP_MODE_PROCESS_STDIN) {
 					if (exec_run || script_file) {
 						param_error = "You can use -R or -F only once.\n";
@@ -773,7 +778,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				script_file = php_optarg;
 				break;
 
-			case 'f': /* parse file */
+			case 'f': // php -f <FILE> 解析并执行文件
 				if (behavior == PHP_MODE_CLI_DIRECT || behavior == PHP_MODE_PROCESS_STDIN) {
 					param_error = param_mode_conflict;
 					break;
@@ -784,7 +789,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				script_file = php_optarg;
 				break;
 
-			case 'l': /* syntax check mode */
+			case 'l':  // 检查文件的语法是否有错误
 				if (behavior != PHP_MODE_STANDARD) {
 					break;
 				}
@@ -907,6 +912,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 			goto err;
 		}
 
+		// 交互模式输出
 		if (interactive) {
 #if (HAVE_LIBREADLINE || HAVE_LIBEDIT) && !defined(COMPILE_DL_READLINE)
 			printf("Interactive shell\n\n");
@@ -926,6 +932,8 @@ static int do_cli(int argc, char **argv) /* {{{ */
 			script_file=argv[php_optind];
 			php_optind++;
 		}
+
+		// 如果有执行脚本的话，获取handler，适用seek方法进行内容读取
 		if (script_file) {
 			if (cli_seek_file_begin(&file_handle, script_file, &lineno) != SUCCESS) {
 				goto err;
@@ -941,6 +949,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 			/* here but this would make things only more complicated. And it */
 			/* is consitent with the way -R works where the stdin file handle*/
 			/* is also accessible. */
+			// 如果是命令行进来的，也给设置一个file_handler, 这样保持后续的代码一致。
 			file_handle.filename = "-";
 			file_handle.handle.fp = stdin;
 		}
@@ -958,6 +967,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 		argv[php_optind-1] = (char*)file_handle.filename;
 		SG(request_info).argv=argv+php_optind-1;
 
+		// 初始化request之后，执行了request_startup
 		if (php_request_startup()==FAILURE) {
 			*arg_excp = arg_free;
 			fclose(file_handle.handle.fp);
@@ -1186,10 +1196,6 @@ int main(int argc, char *argv[])
 	int ini_ignore = 0;
 	sapi_module_struct *sapi_module = &cli_sapi_module;
 
-	/*
-	 * Do not move this initialization. It needs to happen before argv is used
-	 * in any way.
-	 */
 	argv = save_ps_args(argc, argv); //这里获取一次当前执行进程的参数，环境变量等。为的是对特定平台，修正下argv变量以供后续使用。
 
 	cli_sapi_module.additional_functions = additional_functions; // cli模式特有的函数
@@ -1197,12 +1203,7 @@ int main(int argc, char *argv[])
 #ifdef HAVE_SIGNAL_H
 #if defined(SIGPIPE) && defined(SIG_IGN)
 // 忽略SIGPIPE是为了如果php是socket的客户端，那么当服务端关闭的话，会返回一个PIPE的信号，为的是当前的程序不会因为这个而结束
-	signal(SIGPIPE, SIG_IGN); /* ignore SIGPIPE in standalone mode so
-								that sockets created via fsockopen()
-								don't kill PHP if the remote site
-								closes it.  in apache|apxs mode apache
-								does that for us!  thies@thieso.net
-								20000419 */
+	signal(SIGPIPE, SIG_IGN);
 #endif
 #endif
 
@@ -1213,10 +1214,11 @@ int main(int argc, char *argv[])
 	ZEND_TSRMLS_CACHE_UPDATE();
 #endif
 
-	zend_signal_startup();
+	zend_signal_startup();  // 设置信号，把一些需要反应的信号位设置为0
 
+	// 获取参数，做一些对应的初始化行为，或者一些简单的操作，比如help
 	while ((c = php_getopt(argc, argv, OPTIONS, &php_optarg, &php_optind, 0, 2))!=-1) {
-		switch (c) {
+		switch (c) { // 这里的c是代表返回的字符串的ascii码值
 			case 'c':
 				if (ini_path_override) {
 					free(ini_path_override);
@@ -1224,10 +1226,9 @@ int main(int argc, char *argv[])
  				ini_path_override = strdup(php_optarg);
 				break;
 			case 'n':
-				ini_ignore = 1;
+				ini_ignore = 1; // 不使用ini文件，通过代码或者其他指定ini值
 				break;
-			case 'd': {
-				/* define ini entries on command line */
+			case 'd': { // 配置ini的key，val值在命令行中，下面的行为都是修改ini_entries这个变量
 				int len = (int)strlen(php_optarg);
 				char *val;
 
@@ -1271,17 +1272,18 @@ int main(int argc, char *argv[])
 	}
 exit_loop:
 
-	sapi_module->ini_defaults = sapi_cli_ini_defaults;
-	sapi_module->php_ini_path_override = ini_path_override;
-	sapi_module->phpinfo_as_text = 1;
-	sapi_module->php_ini_ignore_cwd = 1;
-	sapi_startup(sapi_module);
-	sapi_started = 1;
+	sapi_module->ini_defaults = sapi_cli_ini_defaults; // 设置初始化的ini值
+	sapi_module->php_ini_path_override = ini_path_override; //设置重写后的ini_path地址，如果是php -c的话，这个就为非null
+	sapi_module->phpinfo_as_text = 1; // 打开打印phpinfo的开关，需要的时候可以把phpinfo打印出来
+	sapi_module->php_ini_ignore_cwd = 1; // 不在当前路径寻找php.ini
+	sapi_startup(sapi_module); // sapi初始化行为，比如初始化全局变量SG
+	sapi_started = 1; // 标记，表示已经调用了startup，关闭的时候需要调用shundown
 
-	sapi_module->php_ini_ignore = ini_ignore;
+	sapi_module->php_ini_ignore = ini_ignore; // 是否不使用ini_ignore,一般都是使用的，除非设置了－n配置
 
-	sapi_module->executable_location = argv[0];
+	sapi_module->executable_location = argv[0]; // 执行位置
 
+	// 下面都是设置sapi_module的ini_entries属性
 	if (sapi_module == &cli_sapi_module) {
 		if (ini_entries) {
 			ini_entries = realloc(ini_entries, ini_entries_len + sizeof(HARDCODED_INI));
@@ -1296,27 +1298,22 @@ exit_loop:
 
 	sapi_module->ini_entries = ini_entries;
 
-	/* startup after we get the above ini override se we get things right */
+	// 开始调用sapi的startup方法，对cli模式，实际上是调用php_cli_startup方法
 	if (sapi_module->startup(sapi_module) == FAILURE) {
-		/* there is no way to see if we must call zend_ini_deactivate()
-		 * since we cannot check if EG(ini_directives) has been initialised
-		 * because the executor's constructor does not set initialize it.
-		 * Apart from that there seems no need for zend_ini_deactivate() yet.
-		 * So we goto out_err.*/
 		exit_status = 1;
 		goto out;
 	}
-	module_started = 1;
+	module_started = 1; // 标记位，标记已经调用了module的startup方法
 
-	/* -e option */
+	// 如果有通过－e配置扩展
 	if (use_extended_info) {
 		CG(compiler_options) |= ZEND_COMPILE_EXTENDED_INFO;
 	}
 
 	zend_first_try {
-			exit_status = do_cli(argc, argv);
+			exit_status = do_cli(argc, argv);  // 这个是实际上调用的内容
 	} zend_end_try();
-out:
+out:  // 这个代码段已经是要退出了
 	if (ini_path_override) {
 		free(ini_path_override);
 	}

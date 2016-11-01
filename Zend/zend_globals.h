@@ -86,7 +86,7 @@ struct _zend_compiler_globals {
 	HashTable *auto_globals;
 
 	zend_bool parse_error;  // 是否有解析错误
-	zend_bool in_compilation;
+	zend_bool in_compilation; // 是否正在编译的流程中
 	zend_bool short_tags;
 
 	zend_bool unclean_shutdown;
