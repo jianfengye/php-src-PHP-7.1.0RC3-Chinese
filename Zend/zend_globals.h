@@ -85,7 +85,7 @@ struct _zend_compiler_globals {
 
 	HashTable *auto_globals;
 
-	zend_bool parse_error;
+	zend_bool parse_error;  // 是否有解析错误
 	zend_bool in_compilation;
 	zend_bool short_tags;
 
@@ -93,7 +93,7 @@ struct _zend_compiler_globals {
 
 	zend_bool ini_parser_unbuffered_errors;
 
-	zend_llist open_files;
+	zend_llist open_files; // 打开的文件
 
 	struct _zend_ini_parser_param *ini_parser_param;
 
@@ -150,7 +150,7 @@ struct _zend_executor_globals {
 
 	HashTable included_files;	/* files already included */
 
-	JMP_BUF *bailout;
+	JMP_BUF *bailout; // setjmp和longjmp使用的jmp_buf结构，其功能是用于进行异常处理的跳转
 
 	int error_reporting;
 	int exit_status;

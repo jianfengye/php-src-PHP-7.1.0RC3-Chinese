@@ -1173,24 +1173,8 @@ err:
 
 /* {{{ main
  */
-#ifdef PHP_CLI_WIN32_NO_CONSOLE
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
-#else
 int main(int argc, char *argv[])
-#endif
 {
-#if defined(PHP_WIN32)
-# ifdef PHP_CLI_WIN32_NO_CONSOLE
-	int argc = __argc;
-	char **argv = __argv;
-# else
-	int num_args;
-	wchar_t **argv_wide;
-	char **argv_save = argv;
-	BOOL using_wide_argv = 0;
-# endif
-#endif
-
 	int c;
 	int exit_status = SUCCESS;
 	int module_started = 0, sapi_started = 0;
@@ -1206,29 +1190,13 @@ int main(int argc, char *argv[])
 	 * Do not move this initialization. It needs to happen before argv is used
 	 * in any way.
 	 */
-	argv = save_ps_args(argc, argv);
+	argv = save_ps_args(argc, argv); //这里获取一次当前执行进程的参数，环境变量等。为的是对特定平台，修正下argv变量以供后续使用。
 
-	cli_sapi_module.additional_functions = additional_functions;
-
-#if defined(PHP_WIN32) && defined(_DEBUG) && defined(PHP_WIN32_DEBUG_HEAP)
-	{
-		int tmp_flag;
-		_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
-		_CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
-		_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
-		_CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
-		_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
-		_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
-		tmp_flag = _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG);
-		tmp_flag |= _CRTDBG_DELAY_FREE_MEM_DF;
-		tmp_flag |= _CRTDBG_LEAK_CHECK_DF;
-
-		_CrtSetDbgFlag(tmp_flag);
-	}
-#endif
+	cli_sapi_module.additional_functions = additional_functions; // cli模式特有的函数
 
 #ifdef HAVE_SIGNAL_H
 #if defined(SIGPIPE) && defined(SIG_IGN)
+// 忽略SIGPIPE是为了如果php是socket的客户端，那么当服务端关闭的话，会返回一个PIPE的信号，为的是当前的程序不会因为这个而结束
 	signal(SIGPIPE, SIG_IGN); /* ignore SIGPIPE in standalone mode so
 								that sockets created via fsockopen()
 								don't kill PHP if the remote site
@@ -1246,13 +1214,6 @@ int main(int argc, char *argv[])
 #endif
 
 	zend_signal_startup();
-
-#ifdef PHP_WIN32
-	_fmode = _O_BINARY;			/*sets default for file streams to binary */
-	setmode(_fileno(stdin), O_BINARY);		/* make the stdio mode be binary */
-	setmode(_fileno(stdout), O_BINARY);		/* make the stdio mode be binary */
-	setmode(_fileno(stderr), O_BINARY);		/* make the stdio mode be binary */
-#endif
 
 	while ((c = php_getopt(argc, argv, OPTIONS, &php_optarg, &php_optind, 0, 2))!=-1) {
 		switch (c) {
@@ -1296,12 +1257,6 @@ int main(int argc, char *argv[])
 				}
 				break;
 			}
-#ifndef PHP_CLI_WIN32_NO_CONSOLE
-			case 'S':
-				sapi_module = &cli_server_sapi_module;
-				cli_server_sapi_module.additional_functions = server_additional_functions;
-				break;
-#endif
 			case 'h': /* help & quit */
 			case '?':
 				php_cli_usage(argv[0]);
@@ -1353,34 +1308,13 @@ exit_loop:
 	}
 	module_started = 1;
 
-#if defined(PHP_WIN32) && !defined(PHP_CLI_WIN32_NO_CONSOLE)
-	php_win32_cp_cli_setup();
-	orig_cp = (php_win32_cp_get_orig())->id;
-	/* Ignore the delivered argv and argc, read from W API. This place
-		might be too late though, but this is the earliest place ATW
-		we can access the internal charset information from PHP. */
-	argv_wide = CommandLineToArgvW(GetCommandLineW(), &num_args);
-	PHP_WIN32_CP_W_TO_ANY_ARRAY(argv_wide, num_args, argv, argc)
-	using_wide_argv = 1;
-
-	SetConsoleCtrlHandler(php_cli_win32_ctrl_handler, TRUE);
-#endif
-
 	/* -e option */
 	if (use_extended_info) {
 		CG(compiler_options) |= ZEND_COMPILE_EXTENDED_INFO;
 	}
 
 	zend_first_try {
-#ifndef PHP_CLI_WIN32_NO_CONSOLE
-		if (sapi_module == &cli_sapi_module) {
-#endif
 			exit_status = do_cli(argc, argv);
-#ifndef PHP_CLI_WIN32_NO_CONSOLE
-		} else {
-			exit_status = do_cli_server(argc, argv);
-		}
-#endif
 	} zend_end_try();
 out:
 	if (ini_path_override) {
@@ -1399,15 +1333,6 @@ out:
 	tsrm_shutdown();
 #endif
 
-#if defined(PHP_WIN32) && !defined(PHP_CLI_WIN32_NO_CONSOLE)
-	(void)php_win32_cp_cli_restore();
-
-	if (using_wide_argv) {
-		PHP_WIN32_CP_FREE_ARRAY(argv, argc);
-		LocalFree(argv_wide);
-	}
-	argv = argv_save;
-#endif
 	/*
 	 * Do not move this de-initialization. It needs to happen right before
 	 * exiting.
