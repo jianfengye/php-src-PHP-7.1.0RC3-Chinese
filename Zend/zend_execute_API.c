@@ -1054,6 +1054,7 @@ ZEND_API zend_object *zend_get_this_object(zend_execute_data *ex) /* {{{ */
 }
 /* }}} */
 
+// 执行代码实际工作函数
 ZEND_API int zend_eval_stringl(char *str, size_t str_len, zval *retval_ptr, char *string_name) /* {{{ */
 {
 	zval pv;
@@ -1068,14 +1069,14 @@ ZEND_API int zend_eval_stringl(char *str, size_t str_len, zval *retval_ptr, char
 		Z_STRVAL(pv)[Z_STRLEN(pv) - 1] = ';';
 		Z_STRVAL(pv)[Z_STRLEN(pv)] = '\0';
 	} else {
-		ZVAL_STRINGL(&pv, str, str_len);
+		ZVAL_STRINGL(&pv, str, str_len); // 把pv设置为string类型，值为str
 	}
 
 	/*printf("Evaluating '%s'\n", pv.value.str.val);*/
 
 	original_compiler_options = CG(compiler_options);
 	CG(compiler_options) = ZEND_COMPILE_DEFAULT_FOR_EVAL;
-	new_op_array = zend_compile_string(&pv, string_name);
+	new_op_array = zend_compile_string(&pv, string_name);  // 这个是把php代码编译成为opcode的过程
 	CG(compiler_options) = original_compiler_options;
 
 	if (new_op_array) {
@@ -1085,7 +1086,7 @@ ZEND_API int zend_eval_stringl(char *str, size_t str_len, zval *retval_ptr, char
 
 		zend_try {
 			ZVAL_UNDEF(&local_retval);
-			zend_execute(new_op_array, &local_retval);
+			zend_execute(new_op_array, &local_retval); // 这个是具体的执行过程，执行opcode，把结果存储到local_retval中
 		} zend_catch {
 			destroy_op_array(new_op_array);
 			efree_size(new_op_array, sizeof(zend_op_array));
@@ -1135,6 +1136,7 @@ ZEND_API int zend_eval_stringl_ex(char *str, size_t str_len, zval *retval_ptr, c
 }
 /* }}} */
 
+// 增加了一个str的长度，由于长度是很经常需要到的
 ZEND_API int zend_eval_string_ex(char *str, zval *retval_ptr, char *string_name, int handle_exceptions) /* {{{ */
 {
 	return zend_eval_stringl_ex(str, strlen(str), retval_ptr, string_name, handle_exceptions);

@@ -138,17 +138,18 @@ void zend_const_expr_to_zval(zval *result, zend_ast *ast);
 
 typedef int (*user_opcode_handler_t) (zend_execute_data *execute_data);
 
+// 一个opcode的结构
 struct _zend_op {
-	const void *handler;
-	znode_op op1;
-	znode_op op2;
-	znode_op result;
-	uint32_t extended_value;
-	uint32_t lineno;
-	zend_uchar opcode;
-	zend_uchar op1_type;
-	zend_uchar op2_type;
-	zend_uchar result_type;
+	const void *handler; // opcode对应的执行函数，每个opcode都有一个对应的执行函数
+	znode_op op1;  // 执行参数的第一个元素
+	znode_op op2;  //  执行参数的第二个元素
+	znode_op result; // 执行结果
+	uint32_t extended_value; // 额外扩展的字段和值
+	uint32_t lineno; // 行数
+	zend_uchar opcode;   // 操作码，具体操作码列表见 http://cn.php.net/manual/zh/internals2.opcodes.php
+	zend_uchar op1_type; // 第一个元素的类型
+	zend_uchar op2_type; // 第二个元素的类型
+	zend_uchar result_type; // 结果的类型
 };
 
 
@@ -349,9 +350,10 @@ typedef struct _zend_internal_function_info {
 	zend_bool _is_variadic;
 } zend_internal_function_info;
 
+// opcode组成的数组，编译的时候就是生成这个结构
 struct _zend_op_array {
 	/* Common elements */
-	zend_uchar type;
+	zend_uchar type;  // op array的类型，比如ZEND_EVAL_CODE
 	zend_uchar arg_flags[3]; /* bitset of arg_info.pass_by_reference */
 	uint32_t fn_flags;
 	zend_string *function_name;
@@ -364,12 +366,12 @@ struct _zend_op_array {
 
 	uint32_t *refcount;
 
-	uint32_t last;
-	zend_op *opcodes;
+	uint32_t last;  // opcode的个数
+	zend_op *opcodes;  // 存储所有的opcode
 
-	int last_var;
+	int last_var; // php变量的个数
 	uint32_t T;
-	zend_string **vars;
+	zend_string **vars; // 被编译的php变量的个数
 
 	int last_live_range;
 	int last_try_catch;
@@ -379,10 +381,10 @@ struct _zend_op_array {
 	/* static variables support */
 	HashTable *static_variables;
 
-	zend_string *filename;
-	uint32_t line_start;
-	uint32_t line_end;
-	zend_string *doc_comment;
+	zend_string *filename;  // 文件名字
+	uint32_t line_start; // 开始于第几行
+	uint32_t line_end; // 结束于第几行
+	zend_string *doc_comment; // 文档的评论
 	uint32_t early_binding; /* the linked list of delayed declarations */
 
 	int last_literal;

@@ -575,6 +575,7 @@ END_EXTERN_C()
 #define CHECK_ZVAL_NULL_PATH(p) (Z_STRLEN_P(p) != strlen(Z_STRVAL_P(p)))
 #define CHECK_NULL_PATH(p, l) (strlen(p) != (size_t)(l))
 
+// 带字符串长度的设置sting类型的zval
 #define ZVAL_STRINGL(z, s, l) do {				\
 		ZVAL_NEW_STR(z, zend_string_init(s, l, 0));		\
 	} while (0)

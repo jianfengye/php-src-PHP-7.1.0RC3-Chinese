@@ -117,19 +117,15 @@ static zend_always_inline uint32_t zend_string_delref(zend_string *s)
 	return 1;
 }
 
+// 分配zend_string的内存空间
 static zend_always_inline zend_string *zend_string_alloc(size_t len, int persistent)
 {
 	zend_string *ret = (zend_string *)pemalloc(ZEND_MM_ALIGNED_SIZE(_ZSTR_STRUCT_SIZE(len)), persistent);
 
 	GC_REFCOUNT(ret) = 1;
-#if 1
-	/* optimized single assignment */
+
 	GC_TYPE_INFO(ret) = IS_STRING | ((persistent ? IS_STR_PERSISTENT : 0) << 8);
-#else
-	GC_TYPE(ret) = IS_STRING;
-	GC_FLAGS(ret) = (persistent ? IS_STR_PERSISTENT : 0);
-	GC_INFO(ret) = 0;
-#endif
+
 	zend_string_forget_hash_val(ret);
 	ZSTR_LEN(ret) = len;
 	return ret;
@@ -153,9 +149,10 @@ static zend_always_inline zend_string *zend_string_safe_alloc(size_t n, size_t m
 	return ret;
 }
 
+// 从char* + 长度 ＋ 是否是临时变量（persistent为0表示最迟这个申请的空间在请求结束的时候就进行释放），转变为zend_string*
 static zend_always_inline zend_string *zend_string_init(const char *str, size_t len, int persistent)
 {
-	zend_string *ret = zend_string_alloc(len, persistent);
+	zend_string *ret = zend_string_alloc(len, persistent); // 申请空间，申请的大小为zend_string结构大小（除了val）+ len + 1
 
 	memcpy(ZSTR_VAL(ret), str, len);
 	ZSTR_VAL(ret)[len] = '\0';

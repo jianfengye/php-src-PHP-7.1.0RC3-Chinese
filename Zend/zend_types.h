@@ -102,36 +102,37 @@ typedef union _zend_value {
 	zend_long         lval;				/* long value */
 	double            dval;				/* double value */
 	zend_refcounted  *counted;
-	zend_string      *str;
-	zend_array       *arr;
-	zend_object      *obj;
-	zend_resource    *res;
-	zend_reference   *ref;
-	zend_ast_ref     *ast;
+	zend_string      *str;             // string
+	zend_array       *arr;             // array
+	zend_object      *obj;             // object
+	zend_resource    *res;             // resource
+	zend_reference   *ref;             // 指针
+	zend_ast_ref     *ast;             // ast指针
 	zval             *zv;
 	void             *ptr;
-	zend_class_entry *ce;
-	zend_function    *func;
+	zend_class_entry *ce;              // class实体
+	zend_function    *func;            // 函数实体
 	struct {
 		uint32_t w1;
 		uint32_t w2;
 	} ww;
 } zend_value;
 
+// zval的结构
 struct _zval_struct {
-	zend_value        value;			/* value */
+	zend_value        value;			// 存储具体值，它的结构根据类型不同而不同
 	union {
 		struct {
 			ZEND_ENDIAN_LOHI_4(
-				zend_uchar    type,			/* active type */
-				zend_uchar    type_flags,
-				zend_uchar    const_flags,
-				zend_uchar    reserved)	    /* call info for EX(This) */
+				zend_uchar    type,			// 这个位置标记了这个val是什么类型的（IS_STRING/IS_INT）
+				zend_uchar    type_flags,   // 这个位置标记了这个val是什么属性 (IS_CALLABLE等)
+				zend_uchar    const_flags,  // 常量的一些属性 (IS_CONSTANT_CLASS)
+				zend_uchar    reserved)	    // 保留的一些字段
 		} v;
-		uint32_t type_info;
-	} u1;
+		uint32_t type_info; // 类型的一些额外信息
+	} u1; // 保存类型的一些关键信息
 	union {
-		uint32_t     next;                 /* hash collision chain */
+		uint32_t     next;                 // 如果是在hash链表中，这个指针代表下一个元素的index
 		uint32_t     cache_slot;           /* literal cache slot */
 		uint32_t     lineno;               /* line number (for ast nodes) */
 		uint32_t     num_args;             /* arguments number for EX(This) */
@@ -139,31 +140,33 @@ struct _zval_struct {
 		uint32_t     fe_iter_idx;          /* foreach iterator index */
 		uint32_t     access_flags;         /* class constant access flags */
 		uint32_t     property_guard;       /* single property guard */
-	} u2;
+	} u2; // 一些附属字段
 };
 
+// 计算这个对象被引用的次数
 typedef struct _zend_refcounted_h {
-	uint32_t         refcount;			/* reference counter 32-bit */
+	uint32_t         refcount;			// 真正的计数
 	union {
 		struct {
 			ZEND_ENDIAN_LOHI_3(
-				zend_uchar    type,
-				zend_uchar    flags,    /* used for strings & objects */
-				uint16_t      gc_info)  /* keeps GC root number (or 0) and color */
+				zend_uchar    type,     // 冗余了zval中的类型值
+				zend_uchar    flags,    // used for strings & objects中有特定作用
+				uint16_t      gc_info)  // 在GC缓冲区中的索引位置
 		} v;
-		uint32_t type_info;
-	} u;
+		uint32_t type_info; // 冗余zval中的type_info
+	} u; // 类型信息
 } zend_refcounted_h;
 
 struct _zend_refcounted {
 	zend_refcounted_h gc;
 };
 
+// 字符串
 struct _zend_string {
-	zend_refcounted_h gc;
-	zend_ulong        h;                /* hash value */
-	size_t            len;
-	char              val[1];
+	zend_refcounted_h gc;  // gc使用的被引用的次数
+	zend_ulong        h;                // 如果这个字符串作为hashtable的key在查找时候需要重复计算它的hash值，所以保存一份在这里
+	size_t            len; // 字符串长度
+	char              val[1]; // 柔性数组，虽然我们定义了数组只有一个元素，但是在实际分配内存的时候，会分配足够的内存
 };
 
 typedef struct _Bucket {

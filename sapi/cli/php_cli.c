@@ -681,7 +681,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 		while ((c = php_getopt(argc, argv, OPTIONS, &php_optarg, &php_optind, 0, 2)) != -1) {
 			switch (c) {
 
-			case 'i': /* php info & quit */
+			case 'i': // 输出phpinfo内容
 				if (php_request_startup()==FAILURE) {
 					goto err;
 				}
@@ -691,7 +691,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				exit_status = (c == '?' && argc > 1 && !strchr(argv[1],  c));
 				goto out;
 
-			case 'v': /* show php version & quit */
+			case 'v': // 输出php版本信息
 				php_printf("PHP %s (%s) (built: %s %s) ( %s)\nCopyright (c) 1997-2016 The PHP Group\n%s",
 					PHP_VERSION, cli_sapi_module.name, __DATE__, __TIME__,
 #if ZTS
@@ -719,7 +719,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				sapi_deactivate();
 				goto out;
 
-			case 'm': /* list compiled in modules */
+			case 'm': // 列出所有模块
 				if (php_request_startup()==FAILURE) {
 					goto err;
 				}
@@ -796,11 +796,11 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				behavior=PHP_MODE_LINT;
 				break;
 
-			case 'q': /* do not generate HTTP headers */
+			case 'q': // 安静模式，默认也是安静模式
 				/* This is default so NOP */
 				break;
 
-			case 'r': /* run code from command line */
+			case 'r': // 从命令行直接执行脚本
 				if (behavior == PHP_MODE_CLI_DIRECT) {
 					if (exec_direct || script_file) {
 						param_error = "You can use -r only once.\n";
@@ -814,7 +814,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				exec_direct=php_optarg;
 				break;
 
-			case 'R':
+			case 'R': // 每行输入的时候执行一次code脚本，比如 php -R 'echo 12;'
 				if (behavior == PHP_MODE_PROCESS_STDIN) {
 					if (exec_run || script_file) {
 						param_error = "You can use -R or -F only once.\n";
@@ -828,7 +828,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				exec_run=php_optarg;
 				break;
 
-			case 'B':
+			case 'B': // 在每次输入开始之前执行一次code脚本
 				if (behavior == PHP_MODE_PROCESS_STDIN) {
 					if (exec_begin) {
 						param_error = "You can use -B only once.\n";
@@ -842,7 +842,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				exec_begin=php_optarg;
 				break;
 
-			case 'E':
+			case 'E': // 在每次输入结束之后执行一次code脚本， 上面的 RBE可以参考一个例子：find conf.d | php -B '$l=0;' -R '$l += count(@file($argn));' -E 'echo "Total Lines: $l\n";'
 				if (behavior == PHP_MODE_PROCESS_STDIN) {
 					if (exec_end) {
 						param_error = "You can use -E only once.\n";
@@ -856,7 +856,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				exec_end=php_optarg;
 				break;
 
-			case 's': /* generate highlighted HTML from source */
+			case 's': // 使用html高亮方式显示代码，这个或许在一些代码显示的时候需要用到
 				if (behavior == PHP_MODE_CLI_DIRECT || behavior == PHP_MODE_PROCESS_STDIN) {
 					param_error = "Source highlighting only works for files.\n";
 					break;
@@ -864,7 +864,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				behavior=PHP_MODE_HIGHLIGHT;
 				break;
 
-			case 'w':
+			case 'w':  // php <file> -w 能把<file>中的评论和多余的空格去掉
 				if (behavior == PHP_MODE_CLI_DIRECT || behavior == PHP_MODE_PROCESS_STDIN) {
 					param_error = "Source stripping only works for files.\n";
 					break;
@@ -872,33 +872,33 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				behavior=PHP_MODE_STRIP;
 				break;
 
-			case 'z': /* load extension file */
+			case 'z': // 加载外部扩展
 				zend_load_extension(php_optarg);
 				break;
-			case 'H':
+			case 'H': // 隐藏所有参数
 				hide_argv = 1;
 				break;
-			case 10:
+			case 10: // 显示function定义
 				behavior=PHP_MODE_REFLECTION_FUNCTION;
 				reflection_what = php_optarg;
 				break;
-			case 11:
+			case 11: // 显示class定义
 				behavior=PHP_MODE_REFLECTION_CLASS;
 				reflection_what = php_optarg;
 				break;
-			case 12:
+			case 12: // 显示扩展定义，注意这里是php扩展
 				behavior=PHP_MODE_REFLECTION_EXTENSION;
 				reflection_what = php_optarg;
 				break;
-			case 13:
+			case 13: // 显示zend扩展定义, 比如xdebug
 				behavior=PHP_MODE_REFLECTION_ZEND_EXTENSION;
 				reflection_what = php_optarg;
 				break;
-			case 14:
+			case 14: // 显示扩展的对应配置
 				behavior=PHP_MODE_REFLECTION_EXT_INFO;
 				reflection_what = php_optarg;
 				break;
-			case 15:
+			case 15: // 显示ini配置
 				behavior = PHP_MODE_SHOW_INI_CONFIG;
 				break;
 			default:
@@ -945,10 +945,6 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				script_filename = script_file;
 			}
 		} else {
-			/* We could handle PHP_MODE_PROCESS_STDIN in a different manner  */
-			/* here but this would make things only more complicated. And it */
-			/* is consitent with the way -R works where the stdin file handle*/
-			/* is also accessible. */
 			// 如果是命令行进来的，也给设置一个file_handler, 这样保持后续的代码一致。
 			file_handle.filename = "-";
 			file_handle.handle.fp = stdin;
@@ -988,8 +984,9 @@ static int do_cli(int argc, char **argv) /* {{{ */
 		zend_is_auto_global_str(ZEND_STRL("_SERVER"));
 
 		PG(during_request_startup) = 0;
+		// 根据不同的行为做不同的具体操作，这个是核心方法
 		switch (behavior) {
-		case PHP_MODE_STANDARD:
+		case PHP_MODE_STANDARD:  // 标准，就是执行一个脚本文件
 			if (strcmp(file_handle.filename, "-")) {
 				cli_register_file_handles();
 			}
@@ -1001,7 +998,7 @@ static int do_cli(int argc, char **argv) /* {{{ */
 				exit_status = EG(exit_status);
 			}
 			break;
-		case PHP_MODE_LINT:
+		case PHP_MODE_LINT: // 只检查文件有没有语法错误
 			exit_status = php_lint_script(&file_handle);
 			if (exit_status==SUCCESS) {
 				zend_printf("No syntax errors detected in %s\n", file_handle.filename);
