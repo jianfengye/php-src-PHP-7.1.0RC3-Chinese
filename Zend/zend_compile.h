@@ -352,19 +352,18 @@ typedef struct _zend_internal_function_info {
 
 // opcode组成的数组，编译的时候就是生成这个结构
 struct _zend_op_array {
-	/* Common elements */
-	zend_uchar type;  // op array的类型，比如ZEND_EVAL_CODE
+	zend_uchar type;  // op array的类型，比如 ZEND_EVAL_CODE
 	zend_uchar arg_flags[3]; /* bitset of arg_info.pass_by_reference */
 	uint32_t fn_flags;
 	zend_string *function_name;
 	zend_class_entry *scope;
 	zend_function *prototype;
-	uint32_t num_args;
+	uint32_t num_args;  // 脚本的参数
 	uint32_t required_num_args;
 	zend_arg_info *arg_info;
 	/* END of common elements */
 
-	uint32_t *refcount;
+	uint32_t *refcount; // 这个结构的引用次数
 
 	uint32_t last;  // opcode的个数
 	zend_op *opcodes;  // 存储所有的opcode
@@ -374,17 +373,17 @@ struct _zend_op_array {
 	zend_string **vars; // 被编译的php变量的个数
 
 	int last_live_range;
-	int last_try_catch;
+	int last_try_catch;  // try_catch的个数
 	zend_live_range *live_range;
-	zend_try_catch_element *try_catch_array;
+	zend_try_catch_element *try_catch_array; //
 
 	/* static variables support */
-	HashTable *static_variables;
+	HashTable *static_variables; // 静态变量
 
-	zend_string *filename;  // 文件名字
+	zend_string *filename;  // 执行的脚本的文件
 	uint32_t line_start; // 开始于第几行
 	uint32_t line_end; // 结束于第几行
-	zend_string *doc_comment; // 文档的评论
+	zend_string *doc_comment; // 文档的注释
 	uint32_t early_binding; /* the linked list of delayed declarations */
 
 	int last_literal;
@@ -393,7 +392,7 @@ struct _zend_op_array {
 	int  cache_size;
 	void **run_time_cache;
 
-	void *reserved[ZEND_MAX_RESERVED_RESOURCES];
+	void *reserved[ZEND_MAX_RESERVED_RESOURCES]; // 保留字段
 };
 
 

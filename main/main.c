@@ -2421,12 +2421,6 @@ PHPAPI int php_execute_script(zend_file_handle *primary_file)
 	zend_try {
 		char realfile[MAXPATHLEN];
 
-#ifdef PHP_WIN32
-		if(primary_file->filename) {
-			UpdateIniFromRegistry((char*)primary_file->filename);
-		}
-#endif
-
 		PG(during_request_startup) = 0;
 
 		if (primary_file->filename && !(SG(options) & SAPI_OPTION_NO_CHDIR)) {
@@ -2473,9 +2467,6 @@ PHPAPI int php_execute_script(zend_file_handle *primary_file)
 			append_file_p = NULL;
 		}
 		if (PG(max_input_time) != -1) {
-#ifdef PHP_WIN32
-			zend_unset_timeout();
-#endif
 			zend_set_timeout(INI_INT("max_execution_time"), 0);
 		}
 
@@ -2531,12 +2522,6 @@ PHPAPI int php_execute_simple_script(zend_file_handle *primary_file, zval *ret)
 	old_cwd[0] = '\0';
 
 	zend_try {
-#ifdef PHP_WIN32
-		if(primary_file->filename) {
-			UpdateIniFromRegistry((char*)primary_file->filename);
-		}
-#endif
-
 		PG(during_request_startup) = 0;
 
 		if (primary_file->filename && !(SG(options) & SAPI_OPTION_NO_CHDIR)) {

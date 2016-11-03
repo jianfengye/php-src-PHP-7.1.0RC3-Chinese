@@ -1076,7 +1076,7 @@ ZEND_API int zend_eval_stringl(char *str, size_t str_len, zval *retval_ptr, char
 
 	original_compiler_options = CG(compiler_options);
 	CG(compiler_options) = ZEND_COMPILE_DEFAULT_FOR_EVAL;
-	new_op_array = zend_compile_string(&pv, string_name);  // 这个是把php代码编译成为opcode的过程
+		new_op_array = zend_compile_string(&pv, string_name);  // 这个是把php代码编译成为opcode的过程
 	CG(compiler_options) = original_compiler_options;
 
 	if (new_op_array) {
