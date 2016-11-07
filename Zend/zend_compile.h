@@ -419,8 +419,9 @@ typedef struct _zend_internal_function {
 
 #define ZEND_FN_SCOPE_NAME(function)  ((function) && (function)->common.scope ? ZSTR_VAL((function)->common.scope->name) : "")
 
+// 代表一个函数结构
 union _zend_function {
-	zend_uchar type;	/* MUST be the first element of this struct! */
+	zend_uchar type;	// 1/2/3/4/5 ZEND_INTERNAL_FUNCTION/ZEND_USER_FUNCTION/ZEND_OVERLOADED_FUNCTION/ZEND_EVAL_CODE/ZEND_OVERLOADED_FUNCTION_TEMPORARY
 	uint32_t   quick_arg_flags;
 
 	struct {
@@ -446,13 +447,14 @@ typedef enum _zend_call_kind {
 	ZEND_CALL_TOP_CODE			/* direct VM call to "main" code from external C code */
 } zend_call_kind;
 
+// 这个结构存储执行过程中的运行时信息，一个op_arrays会初始化一个
 struct _zend_execute_data {
-	const zend_op       *opline;           /* executed opline                */
-	zend_execute_data   *call;             /* current call                   */
-	zval                *return_value;
-	zend_function       *func;             /* executed function              */
+	const zend_op       *opline;           /* 当前正在执行的op                */
+	zend_execute_data   *call;             /* 当前的调用                   */
+	zval                *return_value;     // 返回的return value
+	zend_function       *func;             /* 当前执行的函数              */
 	zval                 This;             /* this + call_info + num_args    */
-	zend_execute_data   *prev_execute_data;
+	zend_execute_data   *prev_execute_data; // 前一个execute_data
 	zend_array          *symbol_table;
 #if ZEND_EX_USE_RUN_TIME_CACHE
 	void               **run_time_cache;   /* cache op_array->run_time_cache */

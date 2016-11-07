@@ -118,7 +118,7 @@ typedef union _zend_value {
 	} ww;
 } zend_value;
 
-// zval的结构
+// zval的结构，存储一个具体值，对标的就是一个$a
 struct _zval_struct {
 	zend_value        value;			// 存储具体值，它的结构根据类型不同而不同
 	union {

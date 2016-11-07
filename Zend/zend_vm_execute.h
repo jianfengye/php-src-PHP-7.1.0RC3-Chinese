@@ -403,51 +403,26 @@ typedef ZEND_OPCODE_HANDLER_RET (ZEND_FASTCALL *opcode_handler_t) (ZEND_OPCODE_H
 
 static ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL zend_interrupt_helper_SPEC(ZEND_OPCODE_HANDLER_ARGS);
 
+// 最核心的执行opcode的函数
 ZEND_API void execute_ex(zend_execute_data *ex)
 {
-	DCL_OPLINE
+	DCL_OPLINE  // 实际上是一个没用的宏，真正的opline已经读取到全局变量里面了
 
-#ifdef ZEND_VM_IP_GLOBAL_REG
-	const zend_op *orig_opline = opline;
-#endif
-#ifdef ZEND_VM_FP_GLOBAL_REG
-	zend_execute_data *orig_execute_data = execute_data;
-	execute_data = ex;
-#else
 	zend_execute_data *execute_data = ex;
-#endif
 
-
-	LOAD_OPLINE();
-	ZEND_VM_LOOP_INTERRUPT_CHECK();
+	LOAD_OPLINE(); // 实际上也没有什么用处，后面的OPLINE宏会去全局变量EG里面拿opline
+	ZEND_VM_LOOP_INTERRUPT_CHECK(); // 确认是否有中断
 
 	while (1) {
-#if !defined(ZEND_VM_FP_GLOBAL_REG) || !defined(ZEND_VM_IP_GLOBAL_REG)
-			int ret;
-#endif
-#if defined(ZEND_VM_FP_GLOBAL_REG) && defined(ZEND_VM_IP_GLOBAL_REG)
-		((opcode_handler_t)OPLINE->handler)(ZEND_OPCODE_HANDLER_ARGS_PASSTHRU);
-		if (UNEXPECTED(!OPLINE)) {
-#else
+		int ret;
+		// 下面一行最关键，每个opline都对应一个handler，比如DO_FCALL的opline对应的是ZEND_DO_FCALL_SPEC_RETVAL_USED_HANDLER
 		if (UNEXPECTED((ret = ((opcode_handler_t)OPLINE->handler)(ZEND_OPCODE_HANDLER_ARGS_PASSTHRU)) != 0)) {
-#endif
-#ifdef ZEND_VM_FP_GLOBAL_REG
-			execute_data = orig_execute_data;
-# ifdef ZEND_VM_IP_GLOBAL_REG
-			opline = orig_opline;
-# endif
-			return;
-#else
 			if (EXPECTED(ret > 0)) {
 				execute_data = EG(current_execute_data);
 				ZEND_VM_LOOP_INTERRUPT_CHECK();
 			} else {
-# ifdef ZEND_VM_IP_GLOBAL_REG
-				opline = orig_opline;
-# endif
 				return;
 			}
-#endif
 		}
 
 	}
@@ -932,7 +907,7 @@ static ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL ZEND_DO_FCALL_SPEC_RETVAL_UNUSED_HA
 
 	LOAD_OPLINE();
 
-	if (EXPECTED(fbc->type == ZEND_USER_FUNCTION)) {
+	if (EXPECTED(fbc->type == ZEND_USER_FUNCTION)) { // 如果这个函数是用户自己定义的函数
 		ret = NULL;
 		if (0) {
 			ret = EX_VAR(opline->result.var);
@@ -948,7 +923,7 @@ static ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL ZEND_DO_FCALL_SPEC_RETVAL_UNUSED_HA
 			ZEND_ADD_CALL_FLAG(call, ZEND_CALL_TOP);
 			zend_execute_ex(call);
 		}
-	} else if (EXPECTED(fbc->type < ZEND_USER_FUNCTION)) {
+	} else if (EXPECTED(fbc->type < ZEND_USER_FUNCTION)) {  // 如果这个函数是内部函数
 		zval retval;
 
 		call->prev_execute_data = execute_data;
@@ -1031,16 +1006,17 @@ fcall_end:
 	ZEND_VM_CONTINUE();
 }
 
+// DO_FCALL这个opcode对应的处理函数
 static ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL ZEND_DO_FCALL_SPEC_RETVAL_USED_HANDLER(ZEND_OPCODE_HANDLER_ARGS)
 {
 	USE_OPLINE
 	zend_execute_data *call = EX(call);
-	zend_function *fbc = call->func;
+	zend_function *fbc = call->func; // 这个是最重要的
 	zend_object *object;
 	zval *ret;
 
-	SAVE_OPLINE();
-	EX(call) = call->prev_execute_data;
+	SAVE_OPLINE(); // 把当前的opline存到全局变量里
+	EX(call) = call->prev_execute_data; // 保存前一个execute_data
 	if (UNEXPECTED((fbc->common.fn_flags & (ZEND_ACC_ABSTRACT|ZEND_ACC_DEPRECATED)) != 0)) {
 		if (UNEXPECTED((fbc->common.fn_flags & ZEND_ACC_ABSTRACT) != 0)) {
 			zend_throw_error(NULL, "Cannot call abstract method %s::%s()", ZSTR_VAL(fbc->common.scope->name), ZSTR_VAL(fbc->common.function_name));
@@ -1059,7 +1035,7 @@ static ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL ZEND_DO_FCALL_SPEC_RETVAL_USED_HAND
 
 	LOAD_OPLINE();
 
-	if (EXPECTED(fbc->type == ZEND_USER_FUNCTION)) {
+	if (EXPECTED(fbc->type == ZEND_USER_FUNCTION)) {  // 如果是用户定义的函数
 		ret = NULL;
 		if (1) {
 			ret = EX_VAR(opline->result.var);
@@ -1075,7 +1051,7 @@ static ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL ZEND_DO_FCALL_SPEC_RETVAL_USED_HAND
 			ZEND_ADD_CALL_FLAG(call, ZEND_CALL_TOP);
 			zend_execute_ex(call);
 		}
-	} else if (EXPECTED(fbc->type < ZEND_USER_FUNCTION)) {
+	} else if (EXPECTED(fbc->type < ZEND_USER_FUNCTION)) { // 如果是内部函数
 		zval retval;
 
 		call->prev_execute_data = execute_data;
@@ -1094,7 +1070,7 @@ static ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL ZEND_DO_FCALL_SPEC_RETVAL_USED_HAND
 
 		if (!zend_execute_internal) {
 			/* saves one function call if zend_execute_internal is not used */
-			fbc->internal_function.handler(call, ret);
+			fbc->internal_function.handler(call, ret);  // 执行这个internal_function所定义的handler函数，这个就是实际的调用方法了，命名为：zim_[class]_function_[function]
 		} else {
 			zend_execute_internal(call, ret);
 		}
@@ -57682,7 +57658,7 @@ static ZEND_OPCODE_HANDLER_RET ZEND_FASTCALL ZEND_NULL_HANDLER(ZEND_OPCODE_HANDL
 	ZEND_VM_NEXT_OPCODE(); /* Never reached */
 }
 
-
+// 不同的opcode对应不同的handler，handler是在 execute_ex的时候调用的
 void zend_init_opcodes_handlers(void)
 {
 	static const void *labels[] = {
@@ -62808,4 +62784,3 @@ ZEND_API int zend_vm_call_opcode_handler(zend_execute_data* ex)
 #endif
 	return ret;
 }
-
