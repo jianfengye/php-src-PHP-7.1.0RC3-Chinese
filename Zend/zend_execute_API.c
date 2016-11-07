@@ -49,41 +49,6 @@ ZEND_API void (*zend_execute_internal)(zend_execute_data *execute_data, zval *re
 ZEND_API const zend_fcall_info empty_fcall_info = { 0, {{0}, {{0}}, {0}}, NULL, NULL, NULL, 0, 0 };
 ZEND_API const zend_fcall_info_cache empty_fcall_info_cache = { 0, NULL, NULL, NULL, NULL };
 
-#ifdef ZEND_WIN32
-ZEND_TLS HANDLE tq_timer = NULL;
-#endif
-
-#if 0&&ZEND_DEBUG
-static void (*original_sigsegv_handler)(int);
-static void zend_handle_sigsegv(int dummy) /* {{{ */
-{
-	fflush(stdout);
-	fflush(stderr);
-	if (original_sigsegv_handler == zend_handle_sigsegv) {
-		signal(SIGSEGV, original_sigsegv_handler);
-	} else {
-		signal(SIGSEGV, SIG_DFL);
-	}
-	{
-
-		fprintf(stderr, "SIGSEGV caught on opcode %d on opline %d of %s() at %s:%d\n\n",
-				active_opline->opcode,
-				active_opline-EG(active_op_array)->opcodes,
-				get_active_function_name(),
-				zend_get_executed_filename(),
-				zend_get_executed_lineno());
-/* See http://support.microsoft.com/kb/190351 */
-#ifdef ZEND_WIN32
-		fflush(stderr);
-#endif
-	}
-	if (original_sigsegv_handler!=zend_handle_sigsegv) {
-		original_sigsegv_handler(dummy);
-	}
-}
-/* }}} */
-#endif
-
 static void zend_extension_activator(zend_extension *extension) /* {{{ */
 {
 	if (extension->activate) {
@@ -134,10 +99,6 @@ void init_executor(void) /* {{{ */
 
 	ZVAL_NULL(&EG(uninitialized_zval));
 	ZVAL_ERROR(&EG(error_zval));
-/* destroys stack frame, therefore makes core dumps worthless */
-#if 0&&ZEND_DEBUG
-	original_sigsegv_handler = signal(SIGSEGV, zend_handle_sigsegv);
-#endif
 
 	EG(symtable_cache_ptr) = EG(symtable_cache) - 1;
 	EG(symtable_cache_limit) = EG(symtable_cache) + SYMTABLE_CACHE_SIZE - 1;
@@ -381,9 +342,6 @@ void shutdown_executor(void) /* {{{ */
 	} zend_end_try();
 
 	zend_try {
-#if 0&&ZEND_DEBUG
-	signal(SIGSEGV, original_sigsegv_handler);
-#endif
 
 		zend_hash_destroy(&EG(included_files));
 
@@ -1228,23 +1186,6 @@ static void zend_timeout_handler(int dummy) /* {{{ */
 #endif
 }
 /* }}} */
-#endif
-
-#ifdef ZEND_WIN32
-VOID CALLBACK tq_timer_cb(PVOID arg, BOOLEAN timed_out)
-{
-	zend_executor_globals *eg;
-
-	/* The doc states it'll be always true, however it theoretically
-		could be FALSE when the thread was signaled. */
-	if (!timed_out) {
-		return;
-	}
-
-	eg = (zend_executor_globals *)arg;
-	eg->timed_out = 1;
-	eg->vm_interrupt = 1;
-}
 #endif
 
 /* This one doesn't exists on QNX */
