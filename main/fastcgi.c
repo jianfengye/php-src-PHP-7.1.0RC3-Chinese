@@ -705,33 +705,6 @@ int fcgi_listen(const char *path, int backlog)
 			}
 		}
 	} else {
-#ifdef _WIN32
-		SECURITY_DESCRIPTOR  sd;
-		SECURITY_ATTRIBUTES  saw;
-		PACL                 acl;
-		HANDLE namedPipe;
-
-		memset(&sa, 0, sizeof(saw));
-		saw.nLength = sizeof(saw);
-		saw.bInheritHandle = FALSE;
-		acl = prepare_named_pipe_acl(&sd, &saw);
-
-		namedPipe = CreateNamedPipe(path,
-			PIPE_ACCESS_DUPLEX | FILE_FLAG_OVERLAPPED,
-			PIPE_TYPE_BYTE | PIPE_WAIT | PIPE_READMODE_BYTE,
-			PIPE_UNLIMITED_INSTANCES,
-			8192, 8192, 0, &saw);
-		if (namedPipe == INVALID_HANDLE_VALUE) {
-			return -1;
-		}
-		listen_socket = _open_osfhandle((intptr_t)namedPipe, 0);
-		if (!is_initialized) {
-			fcgi_init();
-		}
-		is_fastcgi = 1;
-		return listen_socket;
-
-#else
 		int path_len = strlen(path);
 
 		if (path_len >= (int)sizeof(sa.sa_unix.sun_path)) {
@@ -747,7 +720,6 @@ int fcgi_listen(const char *path, int backlog)
 		sa.sa_unix.sun_len = sock_len;
 #endif
 		unlink(path);
-#endif
 	}
 
 	/* Create, bind socket and start listen on it */
@@ -813,13 +785,7 @@ int fcgi_listen(const char *path, int backlog)
 	}
 	is_fastcgi = 1;
 
-#ifdef _WIN32
-	if (tcp) {
-		listen_socket = _open_osfhandle((intptr_t)listen_socket, 0);
-	}
-#else
 	fcgi_setup_signals();
-#endif
 	return listen_socket;
 }
 

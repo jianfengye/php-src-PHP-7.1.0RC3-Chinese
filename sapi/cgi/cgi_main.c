@@ -1767,22 +1767,11 @@ int main(int argc, char *argv[])
 #else
 	time_t start, end;
 #endif
-#ifndef PHP_WIN32
+
 	int status = 0;
-#endif
 	char *query_string;
 	char *decoded_query_string;
 	int skip_getopt = 0;
-
-#if 0 && defined(PHP_DEBUG)
-	/* IIS is always making things more difficult.  This allows
-	 * us to stop PHP and attach a debugger before much gets started */
-	{
-		char szMessage [256];
-		wsprintf (szMessage, "Please attach a debugger to the process 0x%X [%d] (%s) and click OK", GetCurrentProcessId(), GetCurrentProcessId(), argv[0]);
-		MessageBox(NULL, szMessage, "CGI Debug Time!", MB_OK|MB_SERVICE_NOTIFICATION);
-	}
-#endif
 
 #ifdef HAVE_SIGNAL_H
 #if defined(SIGPIPE) && defined(SIG_IGN)
@@ -1812,13 +1801,6 @@ int main(int argc, char *argv[])
 	sapi_startup(&cgi_sapi_module);
 	fastcgi = fcgi_is_fastcgi();
 	cgi_sapi_module.php_ini_path_override = NULL;
-
-#ifdef PHP_WIN32
-	_fmode = _O_BINARY; /* sets default for file streams to binary */
-	setmode(_fileno(stdin),  O_BINARY);	/* make the stdio mode be binary */
-	setmode(_fileno(stdout), O_BINARY);	/* make the stdio mode be binary */
-	setmode(_fileno(stderr), O_BINARY);	/* make the stdio mode be binary */
-#endif
 
 	if (!fastcgi) {
 		/* Make sure we detect we are a cgi - a bit redundancy here,
@@ -2094,13 +2076,6 @@ consult the installation file that came with this distribution, or visit \n\
 						}
 					}
 					if (exit_signal) {
-#if 0
-						while (running > 0) {
-							while (wait(&status) < 0) {
-							}
-							running--;
-						}
-#endif
 						goto parent_out;
 					}
 				}
@@ -2118,8 +2093,8 @@ consult the installation file that came with this distribution, or visit \n\
 			int i;
 
 			ZeroMemory(&kid_cgi_ps, sizeof(kid_cgi_ps));
-			kids = children < WIN32_MAX_SPAWN_CHILDREN ? children : WIN32_MAX_SPAWN_CHILDREN; 
-			
+			kids = children < WIN32_MAX_SPAWN_CHILDREN ? children : WIN32_MAX_SPAWN_CHILDREN;
+
 			SetConsoleCtrlHandler(fastcgi_cleanup, TRUE);
 
 			/* kids will inherit the env, don't let them spawn */
@@ -2195,10 +2170,10 @@ consult the installation file that came with this distribution, or visit \n\
 						fprintf(stderr, "unable to spawn: [0x%08lx]: %s\n", err, err_text);
 					}
 				}
-				
+
 				WaitForMultipleObjects(kids, kid_cgi_ps, FALSE, INFINITE);
 			}
-			
+
 			snprintf(kid_buf, 16, "%d", children);
 			/* restore my env */
 			SetEnvironmentVariable("PHP_FCGI_CHILDREN", kid_buf);
@@ -2249,13 +2224,7 @@ consult the installation file that came with this distribution, or visit \n\
 
 		/* start of FAST CGI loop */
 		/* Initialise FastCGI request structure */
-#ifdef PHP_WIN32
-		/* attempt to set security impersonation for fastcgi
-		 * will only happen on NT based OS, others will ignore it. */
-		if (fastcgi && CGIG(impersonate)) {
-			fcgi_impersonate();
-		}
-#endif
+
 		while (!fastcgi || fcgi_accept_request(request) >= 0) {
 			SG(server_context) = fastcgi ? (void *)request : (void *) 1;
 			init_request_info(request);
@@ -2672,7 +2641,7 @@ fastcgi_request_done:
 			}
 			/* end of fastcgi loop */
 		}
-		
+
 		if (request) {
 			fcgi_destroy_request(request);
 		}
@@ -2718,10 +2687,6 @@ parent_out:
 
 #ifdef ZTS
 	tsrm_shutdown();
-#endif
-
-#if defined(PHP_WIN32) && ZEND_DEBUG && 0
-	_CrtDumpMemoryLeaks();
 #endif
 
 	return exit_status;
