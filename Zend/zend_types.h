@@ -876,6 +876,7 @@ static zend_always_inline uint32_t zval_delref_p(zval* pz) {
 		}												\
 	} while (0)
 
+// 复制一个值，如果你复制完之后需要做修改，那么就使用这个，比如如果是字符串，它不会让引用计数增加
 #define ZVAL_DUP(z, v)									\
 	do {												\
 		zval *_z1 = (z);								\

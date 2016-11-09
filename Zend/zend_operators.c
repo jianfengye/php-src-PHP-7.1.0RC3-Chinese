@@ -508,6 +508,7 @@ ZEND_API void ZEND_FASTCALL _convert_to_cstring(zval *op ZEND_FILE_LINE_DC) /* {
 }
 /* }}} */
 
+// 转换op成为字符类型
 ZEND_API void ZEND_FASTCALL _convert_to_string(zval *op ZEND_FILE_LINE_DC) /* {{{ */
 {
 try_again:
@@ -2894,7 +2895,7 @@ process_double:
 }
 /* }}} */
 
-/* 
+/*
  * String matching - Sunday algorithm
  * http://www.iti.fh-flensburg.de/lang/algorithmen/pattern/sundayen.htm
  */
@@ -2978,7 +2979,7 @@ ZEND_API const char* ZEND_FASTCALL zend_memnrstr_ex(const char *haystack, const 
 		if (i == needle_len) {
 			return (const char *)p;
 		}
-		
+
 		if (UNEXPECTED(p == haystack)) {
 			return NULL;
 		}

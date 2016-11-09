@@ -281,7 +281,7 @@ static zend_always_inline zend_string *_zval_get_string(zval *op) {
 #define zval_get_string(op) _zval_get_string((op))
 
 #define convert_to_cstring(op) if (Z_TYPE_P(op) != IS_STRING) { _convert_to_cstring((op) ZEND_FILE_LINE_CC); }
-#define convert_to_string(op) if (Z_TYPE_P(op) != IS_STRING) { _convert_to_string((op) ZEND_FILE_LINE_CC); }
+#define convert_to_string(op) if (Z_TYPE_P(op) != IS_STRING) { _convert_to_string((op) ZEND_FILE_LINE_CC); }  // 如果不是字符类型就转换为字符类型
 
 
 ZEND_API int ZEND_FASTCALL zend_is_true(zval *op);
