@@ -780,6 +780,7 @@ PHPAPI zend_ulong mysqlnd_cset_escape_quotes(const MYSQLND_CHARSET * const cset,
 
 
 /* {{{ mysqlnd_cset_escape_slashes */
+// 这个是mysqli_escape_string的最主要的函数
 PHPAPI zend_ulong mysqlnd_cset_escape_slashes(const MYSQLND_CHARSET * const cset, char *newstr,
 										 const char * escapestr, size_t escapestr_len)
 {
@@ -812,6 +813,7 @@ PHPAPI zend_ulong mysqlnd_cset_escape_slashes(const MYSQLND_CHARSET * const cset
 		if (cset->char_maxlen > 1 && cset->mb_charlen(*escapestr) > 1) {
 			esc = *escapestr;
 		} else {
+			// 下面的是需要进行转义的字符
 			switch (*escapestr) {
 				case 0:
 					esc = '0';
@@ -833,6 +835,7 @@ PHPAPI zend_ulong mysqlnd_cset_escape_slashes(const MYSQLND_CHARSET * const cset
 			}
 		}
 		if (esc) {
+			// 要转义
 			if (newstr + 2 > newstr_e) {
 				escape_overflow = TRUE;
 				break;
@@ -841,6 +844,7 @@ PHPAPI zend_ulong mysqlnd_cset_escape_slashes(const MYSQLND_CHARSET * const cset
 			*newstr++ = '\\';
 			*newstr++ = esc;
 		} else {
+			// 不要转义
 			if (newstr + 1 > newstr_e) {
 				escape_overflow = TRUE;
 				break;
